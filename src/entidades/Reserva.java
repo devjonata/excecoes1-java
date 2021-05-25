@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import excecao.ExcecaoDeDominio;
+
 public class Reserva {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -16,6 +18,9 @@ public class Reserva {
 	}
 
 	public Reserva(Integer sala, Date entrada, Date saida) {
+		if (!saida.after(entrada)) {
+			throw new ExcecaoDeDominio("A data de saida de ser apos data de entrada ");
+		}
 		this.sala = sala;
 		this.entrada = entrada;
 		this.saida = saida;
@@ -42,18 +47,17 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(calc, TimeUnit.MILLISECONDS);
 	}
 
-	public String atualizarData(Date entrada, Date saida) {
+	public void atualizarData(Date entrada, Date saida) {
 		
 		Date agora = new Date();
 		if (entrada.before(agora) || saida.before(agora)) {
-			return "As datas para atualizaçao devem ser datas futuras ";
+			throw new ExcecaoDeDominio("As datas para atualizaçao devem ser datas futuras ");
 		} if (!saida.after(entrada)) {
-			return "A data de saida de ser apos data de entrada ";
+			throw new ExcecaoDeDominio("A data de saida de ser apos data de entrada ");
 		}
 		
 		this.entrada = entrada;
 		this.saida = saida;
-		return null;
 	}
 
 	@Override
