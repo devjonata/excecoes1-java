@@ -42,9 +42,18 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(calc, TimeUnit.MILLISECONDS);
 	}
 
-	public void atualizarData(Date entrada, Date saida) {
+	public String atualizarData(Date entrada, Date saida) {
+		
+		Date agora = new Date();
+		if (entrada.before(agora) || saida.before(agora)) {
+			return "As datas para atualizaçao devem ser datas futuras ";
+		} if (!saida.after(entrada)) {
+			return "A data de saida de ser apos data de entrada ";
+		}
+		
 		this.entrada = entrada;
 		this.saida = saida;
+		return null;
 	}
 
 	@Override
